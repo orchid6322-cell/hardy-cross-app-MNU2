@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>하디-크로스 관망해석</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header>
+    <div>
+      <h1>하디-크로스 관망해석</h1>
+      <p>예제 5.14 · Hazen-Williams k · ΔQ = −Σhf / (n Σ|hf/Q|) · Q 단위 m³/s</p>
+    </div>
+  </header>
+  <main>
+    <section class="panel">
+      <h2>입력</h2>
+      <div class="row">
+        <label>마찰 공식
+          <select id="formula">
+            <option value="hazen_williams">Hazen-Williams (n=1.852)</option>
+            <option value="darcy_weisbach">Darcy-Weisbach (n=2)</option>
+          </select>
+        </label>
+        <label>허용오차 |ΔQ|
+          <input id="tol" type="number" step="any" value="1e-6">
+        </label>
+        <label>최대 반복
+          <input id="maxiter" type="number" value="80">
+        </label>
+        <button type="button" class="ghost" id="load">예제 불러오기</button>
+        <button type="button" id="solve">해석</button>
+      </div>
+      <h2>관 (유량 + : 시점→종점)</h2>
+      <div class="scroll">
+        <table id="pipes">
+          <thead>
+            <tr>
+              <th>ID</th><th>시점</th><th>종점</th><th>L (m)</th><th>D (m)</th>
+              <th>k</th><th>C</th><th>초기 Q</th><th></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <button type="button" class="ghost" id="add-pipe" style="margin-top:0.5rem">관 추가</button>
+      <h2 style="margin-top:1rem">폐회로 (반대 방향은 -P2)</h2>
+      <div class="scroll">
+        <table id="loops">
+          <thead><tr><th>ID</th><th>관 목록</th><th></th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <button type="button" class="ghost" id="add-loop" style="margin-top:0.5rem">루프 추가</button>
+      <p class="msg" id="msg"></p>
+    </section>
+    <section class="panel">
+      <h2>관망 도식</h2>
+      <svg id="net" class="network" viewBox="0 0 460 300"></svg>
+      <p class="legend">화살표는 계산된 유량 방향, 선 굵기는 |Q|에 비례합니다.</p>
+      <h2>결과</h2>
+      <div class="scroll">
+        <table id="out">
+          <thead>
+            <tr><th>관</th><th>방향</th><th>Q (m³/s)</th><th>V (m/s)</th><th>hf (m)</th><th>r</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <h2 style="margin-top:1rem">반복 이력</h2>
+      <pre class="hist" id="hist"></pre>
+    </section>
+  </main>
+  <script src="/static/app.js"></script>
+</body>
+</html>
